@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>Create bird</title>
+		<script src="https://cdn.tailwindcss.com"></script>
+		<script src="./js/script.js"></script>
+	</head>
+	<body>
+		<div class="relative bg-white">
+			<div class="mx-auto max-w-7xl px-6">
+				<div
+					class="flex items-center justify-between border-b-2 border-gray-100 py-6 md:justify-start md:space-x-10"
+				>
+					<div class="flex justify-start lg:w-0 lg:flex-1">
+						<a href="./Birds.html">
+							<img
+								class="h-8 w-auto sm:h-10"
+								src="https://img.icons8.com/ios-filled/512/salt-bae.png"
+								alt=""
+							/>
+						</a>
+					</div>
+
+					<div class="flex items-center justify-center">
+						<a
+							href="./Birds.html"
+							class="inline-flex items-center justify-center whitespace-nowrap rounded-md border border-transparent bg-green-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-green-700"
+						>
+							Список птиц
+						</a>
+					</div>
+
+					<div class="items-center justify-end flex md:flex-1 lg:w-0">
+						<a
+							href="./CreateBird.html"
+							class="inline-flex items-center justify-center whitespace-nowrap rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-indigo-700"
+							>Создать птицу</a
+						>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="flex flex-column justify-between mx-auto max-w-7xl px-6">
+			<form class="w-1/3 mx-auto py-10">
+				<label
+					class="text-gray-800 py-2 bg-gray-400 font-medium flex items-center justify-center border-2 border-dotted rounded-md cursor-pointer"
+				>
+					Прикрепить изображение:
+					<input type="file" class="hidden" />
+				</label>
+				<div class="flex object-cover py-2 flex items-center justify-center">
+					IMAGE
+				</div>
+
+				<lable class="text-xl text-black opacity-70">
+					Именование птицы:
+					<input
+						type="text"
+						placeholder="Заголовок"
+						class="mt-1 mx-0 text-black w-full rounded-lg bg-gray-400 border py-1 px-2 text-sm outline-none placeholder: text-gray-700"
+					/>
+				</lable>
+
+				<lable class="text-xl text-black opacity-70">
+					Описание:
+					<textarea
+						placeholder="Опис..."
+						class="mt-1 mx-0 text-black w-full rounded-lg bg-gray-400 border py-1 px-2 text-sm outline-none resize-none h-40 placeholder: text-gray-700"
+					></textarea>
+				</lable>
+
+				<div class="w-full">
+					<div
+						class="w-full p-6 bg-white border border-gray-200 rounded-lg shadow-md bg-gray-100 my-3"
+					>
+						<label
+							class="text-gray-800 py-2 bg-gray-400 font-medium flex items-center justify-center border-2 border-dotted rounded-md cursor-pointer"
+						>
+							Прикрепить изображение:
+							<input type="file" class="hidden" />
+						</label>
+						<div
+							class="flex object-cover py-2 flex items-center justify-center"
+						>
+							IMAGE
+						</div>
+
+						<lable class="text-xl text-black opacity-70">
+							Название рецепта:
+							<input
+								type="text"
+								placeholder="Заголовок"
+								class="mt-1 mx-0 text-black w-full rounded-lg bg-gray-400 border py-1 px-2 text-sm outline-none placeholder: text-gray-700"
+							/>
+						</lable>
+
+						<lable class="text-xl text-black opacity-70">
+							Описание:
+							<textarea
+								placeholder="Опис..."
+								class="mt-1 mx-0 text-black w-full rounded-lg bg-gray-400 border py-1 px-2 text-sm outline-none resize-none h-40 placeholder: text-gray-700"
+							></textarea>
+						</lable>
+					</div>
+				</div>
+
+				<div class="flex gap-8 items-center justify-center mt-4">
+					<button
+						class="flex justify-center items-center bg-gray-600 text-xs text-white rounded-sm py-2 px-4 hover:bg-green-700"
+					>
+						Добавить рецепт
+					</button>
+					<button
+						class="flex justify-center items-center bg-gray-600 text-xs text-white rounded-sm py-2 px-4 hover:bg-green-700"
+					>
+						Создать птицу
+					</button>
+				</div>
+			</form>
+		</div>
+	</body>
+</html>
