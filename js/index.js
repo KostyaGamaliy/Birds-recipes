@@ -1,4 +1,4 @@
-var recipeForm = `
+/*var recipeForm = `
 	<div class="w-full">
 		<div
 			class="w-full p-6 bg-white border border-gray-200 rounded-lg shadow-md bg-gray-100 my-3"
@@ -33,9 +33,37 @@ var recipeForm = `
 				></textarea>
 			</lable>
 		</div>
-	</div>`
+	</div>` */
 
-var createForm = `
+let header = `
+	<div class="flex justify-start lg:w-0 lg:flex-1">
+						<img
+							class="h-8 w-auto sm:h-10"
+							src="https://img.icons8.com/ios-filled/512/salt-bae.png"
+							alt=""
+						/>
+					</div>
+
+					<div class="flex items-center justify-center">
+						<button
+							id="allBirdsBtn"
+							class="inline-flex items-center justify-center whitespace-nowrap rounded-md border border-transparent bg-green-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-green-700 cursor-pointer"
+							onclick="card()"
+						>
+							Список птиц
+						</button>
+					</div>
+
+					<div class="items-center justify-end flex md:flex-1 lg:w-0">
+						<button
+							id="createBirdBtn"
+							class="inline-flex items-center justify-center whitespace-nowrap rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-indigo-700 cursor-pointer"
+							onclick="openCreateBird()"
+							>Создать птицу</button
+						>
+					</div>`
+
+let createBirdForm = `
 	<label
 		class="text-gray-800 py-2 bg-gray-400 font-medium flex items-center justify-center border-2 border-dotted rounded-md cursor-pointer"
 	>
@@ -69,82 +97,44 @@ var createForm = `
 	<div class="flex gap-8 items-center justify-center mt-4">
 		<div
 			class="flex justify-center items-center bg-gray-600 text-xs text-white rounded-sm py-2 px-4 hover:bg-green-700"
-			onclick="addRecipeForm()"
-		>
-			Добавить рецепт
-		</div>
-
-		<div
-			class="flex justify-center items-center bg-gray-600 text-xs text-white rounded-sm py-2 px-4 hover:bg-green-700"
-			onclick="save()"
+			onclick="save(); closeCreateBird()"
 		>
 			Создать птицу
 		</div>
 	</div>`
 
-var createRecipeForm = `
-	<label
-		class="text-gray-800 py-2 bg-gray-400 font-medium flex items-center justify-center border-2 border-dotted rounded-md cursor-pointer"
-	>
-		Прикрепить изображение:
-		<input type="file" class="hidden" />
-	</label>
-
-	<div class="flex object-cover py-2 flex items-center justify-center">
-		IMAGE
-	</div>
-
-	<lable class="text-xl text-black opacity-70">
-		Название рецепта:
-		<input
-			type="text"
-			placeholder="Заголовок"
-			class="mt-1 mx-0 text-black w-full rounded-lg bg-gray-400 border py-1 px-2 text-sm outline-none placeholder: text-gray-700"
-			id="birdName"
-		/>
-	</lable>
-
-	<lable class="text-xl text-black opacity-70">
-		Описание:
-		<textarea
-			placeholder="Опис..."
-			class="mt-1 mx-0 text-black w-full rounded-lg bg-gray-400 border py-1 px-2 text-sm outline-none resize-none h-40 placeholder: text-gray-700"
-			id="birdDescription"
-		></textarea>
-	</lable>`
-
+details = []
 let createFormEl = document.getElementById("createForm")
+document.getElementById("header").innerHTML = header
 
 if (createFormEl) {
-	createFormEl.innerHTML = createForm
+	createFormEl.innerHTML = createBirdForm
+}
+
+function openCreateBird() {
+	document.getElementById("createForm").classList.remove("hidden")
+}
+
+function closeCreateBird() {
+	document.getElementById("createForm").classList.add("hidden")
 }
 
 function card() {
 	let birdCardForm = ``
-	for (let i = 0; i < details.length; i++) {
-		birdCardForm =
-			birdCardForm +
-			`
-			<div class="max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow-md bg-gray-100 my-3">
-				<a
-					href="https://ru.wikipedia.org/wiki/%D0%9A%D1%83%D1%80%D0%B8%D1%86%D0%B0"
-				>
-					<img
-						class="rounded-t-lg h-[223px] w-[335px]"
-						src="${details[i].imageUrl}"
-						alt=""
-					/>
-				</a>
 
-				<a
-					href="https://ru.wikipedia.org/wiki/%D0%9A%D1%83%D1%80%D0%B8%D1%86%D0%B0"
+	for (let i = 0; i < details.length; i++) {
+		birdCardForm += `
+			<div class="max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow-md bg-gray-100 my-3">
+				<img
+					class="rounded-t-lg h-[223px] w-[335px]"
+					src="${details[i].imageUrl}"
+					alt=""
+				/>
+				<h5
+					class="mb-2 text-2xl font-bold tracking-tight text-slate-700 hover:text-slate-900 text-ellipsis overflow-hidden"
 				>
-					<h5
-						class="mb-2 text-2xl font-bold tracking-tight text-slate-700 hover:text-slate-900 text-ellipsis overflow-hidden"
-					>
-						${details[i].name}
-					</h5>
-				</a>
+					${details[i].name}
+				</h5>
 
 				<p
 					class="mb-3 font-normal text-gray-700 dark:text-gray-400 overflow-y-auto h-32"
@@ -153,8 +143,8 @@ function card() {
 				</p>
 					
 				<a
-					href="./Recipes.html"
-					class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+					class="inline-flex items-center px-3 py-2 w-full text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 cursor-pointer"
+					onclick="recipeCard(${i})"
 				>
 					Список рецептов
 					<svg
@@ -172,9 +162,16 @@ function card() {
 					</svg>
 				</a>
 
-				<div class="flex flex-row justify-start mt-3">
+				<div class="flex flex-row justify-between mt-3">
 					<button
-						class="inline-flex items-center px-3 py-2 mr-3 text-sm font-medium text-center text-white bg-green-700 rounded-lg hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-400"
+						class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-rose-400"
+						onclick="createRecipe(${i})"
+					>
+						Добавить рецепт
+					</button>
+				
+					<button
+						class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-green-700 rounded-lg hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-400"
 						onclick="edit(${i})"
 					>
 						Изменить
@@ -193,7 +190,49 @@ function card() {
 	document.getElementById("birdForm").innerHTML = birdCardForm
 }
 
-details = []
+function recipeCard(index) {
+	let object = details[index].recipeArray
+	let recipeCardForm = ``
+
+	for (let i = 0; i < object.length; i++) {
+		recipeCardForm += `
+			<div class="max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow-md bg-gray-100 my-3">
+				<img
+					class="rounded-t-lg h-[223px] w-[335px]"
+					src="${object[i].imageUrl}"
+					alt=""
+				/>
+				<h5
+					class="mb-2 text-2xl font-bold tracking-tight text-slate-700 hover:text-slate-900 text-ellipsis overflow-hidden"
+				>
+					${object[i].recipeName}
+				</h5>
+
+				<p
+					class="mb-3 font-normal text-gray-700 dark:text-gray-400 overflow-y-auto h-32"
+				>
+					${object[i].recipeText}
+				</p>
+
+				<div class="flex flex-row justify-between mt-3">
+					<button
+						class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-green-700 rounded-lg hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-400"
+						onclick="edit(${i})"
+					>
+						Изменить
+					</button>
+
+					<button
+						class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-rose-700 rounded-lg hover:bg-rose-800 focus:ring-4 focus:outline-none focus:ring-rose-400"
+						onclick="deleteData(${i})"
+					>
+						Удалить
+					</button>
+				</div>
+			</div>`
+	}
+	document.getElementById("birdForm").innerHTML = recipeCardForm
+}
 
 getData()
 card()
@@ -245,6 +284,7 @@ function save() {
 		name: name.value,
 		description: desc.value,
 		imageUrl: URL.createObjectURL(f),
+		recipeArray: [],
 	}
 
 	details.push(data)
@@ -311,17 +351,81 @@ function update(index) {
 	let newBirdName = document.getElementById("newBirdName")
 	let newBirdDescription = document.getElementById("newBirdDescription")
 	let f = file1.files[0]
+	let getRecipes = details[index].recipeArray
 
 	details[index] = {
 		name: newBirdName.value,
 		description: newBirdDescription.value,
 		imageUrl: URL.createObjectURL(f),
+		recipeArray: getRecipes,
 	}
 
 	setData()
 	card()
 
 	if (createFormEl) {
-		createFormEl.innerHTML = createForm
+		createFormEl.innerHTML = createBirdForm
+	}
+}
+
+function createRecipe(index) {
+	let createRecipeForm = `
+		<label
+			class="text-gray-800 py-2 bg-gray-400 font-medium flex items-center justify-center border-2 border-dotted rounded-md cursor-pointer"
+		>
+			Прикрепить изображение:
+			<input type="file" id="file1" class="hidden" onchange="addImage()"/>
+		</label>
+
+		<div class="flex object-cover py-2 flex items-center justify-center w-full" id="imgSaveField">
+			<img id="prevImg" class="w-full" />
+		</div>
+
+		<lable class="text-xl text-black opacity-70">
+			Название рецепта:
+			<input
+				type="text"
+				placeholder="Заголовок"
+				class="mt-1 mx-0 text-black w-full rounded-lg bg-gray-400 border py-1 px-2 text-sm outline-none placeholder: text-gray-700"
+				id="recipeName"
+			/>
+		</lable>
+
+		<lable class="text-xl text-black opacity-70">
+			Инструкция приготовления:
+			<textarea
+				class="mt-1 mx-0 text-black w-full rounded-lg bg-gray-400 border py-1 px-2 text-sm outline-none resize-none h-40 placeholder: text-gray-700"
+				id="recipeText"
+			></textarea>
+		</lable>
+
+		<div class="flex gap-8 items-center justify-center mt-4">
+			<div
+				class="flex justify-center items-center bg-gray-600 text-xs text-white rounded-sm py-2 px-4 hover:bg-green-700"
+				onclick="addRecipeForm(${index})"
+			>
+				Добавить рецепт
+			</div>
+		</div>`
+
+	document.getElementById("createForm").innerHTML = createRecipeForm
+}
+
+function addRecipeForm(index) {
+	let recipeName = document.getElementById("recipeName")
+	let recipeText = document.getElementById("recipeText")
+	let f = file1.files[0]
+
+	details[index].recipeArray.push({
+		recipeName: recipeName.value,
+		recipeText: recipeText.value,
+		recipeImageUrl: URL.createObjectURL(f),
+	})
+
+	setData()
+	card()
+
+	if (createFormEl) {
+		createFormEl.innerHTML = createBirdForm
 	}
 }
