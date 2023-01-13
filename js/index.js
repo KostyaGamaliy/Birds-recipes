@@ -48,7 +48,7 @@ let header = `
 						<button
 							id="allBirdsBtn"
 							class="inline-flex items-center justify-center whitespace-nowrap rounded-md border border-transparent bg-green-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-green-700 cursor-pointer"
-							onclick="card()"
+							onclick="card(); closeCreateBird(); openBirdCards()"
 						>
 							Список птиц
 						</button>
@@ -58,7 +58,7 @@ let header = `
 						<button
 							id="createBirdBtn"
 							class="inline-flex items-center justify-center whitespace-nowrap rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-indigo-700 cursor-pointer"
-							onclick="openCreateBird()"
+							onclick="openCreateBird(); closeBirdCards()"
 							>Создать птицу</button
 						>
 					</div>`
@@ -97,13 +97,14 @@ let createBirdForm = `
 	<div class="flex gap-8 items-center justify-center mt-4">
 		<div
 			class="flex justify-center items-center bg-gray-600 text-xs text-white rounded-sm py-2 px-4 hover:bg-green-700"
-			onclick="save(); closeCreateBird()"
+			onclick="save(); closeCreateBird(); openBirdCards()"
 		>
 			Создать птицу
 		</div>
 	</div>`
 
 details = []
+
 let createFormEl = document.getElementById("createForm")
 document.getElementById("header").innerHTML = header
 
@@ -117,6 +118,14 @@ function openCreateBird() {
 
 function closeCreateBird() {
 	document.getElementById("createForm").classList.add("hidden")
+}
+
+function openBirdCards() {
+	document.getElementById("birdForm").classList.remove("hidden")
+}
+
+function closeBirdCards() {
+	document.getElementById("birdForm").classList.add("hidden")
 }
 
 function card() {
@@ -165,14 +174,14 @@ function card() {
 				<div class="flex flex-row justify-between mt-3">
 					<button
 						class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-rose-400"
-						onclick="createRecipe(${i})"
+						onclick="createRecipe(${i}); openCreateBird(); closeBirdCards()"
 					>
 						Добавить рецепт
 					</button>
 				
 					<button
 						class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-green-700 rounded-lg hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-400"
-						onclick="edit(${i})"
+						onclick="edit(${i}); openCreateBird(); closeBirdCards()"
 					>
 						Изменить
 					</button>
@@ -217,14 +226,14 @@ function recipeCard(index) {
 				<div class="flex flex-row justify-between mt-3">
 					<button
 						class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-green-700 rounded-lg hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-400"
-						onclick="edit(${i})"
+						onclick="editRecipe(${index},${i}); openCreateBird(); "
 					>
 						Изменить
 					</button>
 
 					<button
 						class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-rose-700 rounded-lg hover:bg-rose-800 focus:ring-4 focus:outline-none focus:ring-rose-400"
-						onclick="deleteData(${i})"
+						onclick="deleteRecipe(${index},${i})"
 					>
 						Удалить
 					</button>
@@ -249,14 +258,6 @@ function getData() {
 
 function setData() {
 	localStorage.setItem("details", JSON.stringify(details))
-}
-
-function addRecipeForm() {
-	let createRecipeFormEl = document.getElementById("createRecipeForm")
-
-	if (createRecipeFormEl) {
-		createRecipeFormEl.innerHTML = createRecipeForm
-	}
 }
 
 function addImage() {
@@ -304,6 +305,13 @@ function deleteData(index) {
 	card()
 }
 
+function deleteRecipe(indexObj, indexRecipe) {
+	details[indexObj].recipeArray.splice(indexRecipe, 1)
+
+	setData()
+	recipeCard(indexObj)
+}
+
 function edit(index) {
 	let editForm = `
 		<label
@@ -338,13 +346,56 @@ function edit(index) {
 		<div class="flex gap-8 items-center justify-center mt-4">
 			<div
 				class="flex justify-center items-center bg-gray-600 text-xs text-white rounded-sm py-2 px-4 hover:bg-green-700"
-				onclick="update(${index})"
+				onclick="update(${index}); closeCreateBird(); openBirdCards()"
 			>
 				Обновить
 			</div>
 		</div>`
 
 	document.getElementById("createForm").innerHTML = editForm
+}
+
+function editRecipe(indexObj, indexRecipe) {
+	let editRecipeForm = `
+		<label
+			class="text-gray-800 py-2 bg-gray-400 font-medium flex items-center justify-center border-2 border-dotted rounded-md cursor-pointer"
+		>
+			Прикрепить изображение:
+			<input type="file" id="file1" class="hidden" />
+		</label>
+
+		<div class="flex object-cover py-2 flex items-center justify-center">
+		</div>
+
+		<lable class="text-xl text-black opacity-70">
+			Обновить название рецепта:
+			<input
+				type="text"
+				value="${details[indexObj].recipeArray[indexRecipe].recipeName}"
+				placeholder="Заголовок"
+				class="mt-1 mx-0 text-black w-full rounded-lg bg-gray-400 border py-1 px-2 text-sm outline-none placeholder: text-gray-700"
+				id="newRecipeName"
+			/>
+		</lable>
+
+		<lable class="text-xl text-black opacity-70">
+			Обновить рецепт приготовления:
+			<textarea
+				class="mt-1 mx-0 text-black w-full rounded-lg bg-gray-400 border py-1 px-2 text-sm outline-none resize-none h-40 placeholder: text-gray-700"
+				id="newRecipeText"
+			>${details[indexObj].recipeArray[indexRecipe].recipeText}</textarea>
+		</lable>
+
+		<div class="flex gap-8 items-center justify-center mt-4">
+			<div
+				class="flex justify-center items-center bg-gray-600 text-xs text-white rounded-sm py-2 px-4 hover:bg-green-700"
+				onclick="updateRecipe(${indexObj}, ${indexRecipe}); closeCreateBird(); openBirdCards()"
+			>
+				Обновить
+			</div>
+		</div>`
+
+	document.getElementById("createForm").innerHTML = editRecipeForm
 }
 
 function update(index) {
@@ -359,6 +410,24 @@ function update(index) {
 		imageUrl: URL.createObjectURL(f),
 		recipeArray: getRecipes,
 	}
+
+	setData()
+	card()
+
+	if (createFormEl) {
+		createFormEl.innerHTML = createBirdForm
+	}
+}
+
+function updateRecipe(indexObj, indexRecipe) {
+	let newRecipeName = document.getElementById("newRecipeName").value
+	let newRecipeText = document.getElementById("newRecipeText").value
+	let f = file1.files[0]
+
+	details[indexObj].recipeArray[indexRecipe].recipeName = newRecipeName
+	details[indexObj].recipeArray[indexRecipe].recipeText = newRecipeText
+	details[indexObj].recipeArray[indexRecipe].recipeImageUrl =
+		URL.createObjectURL(f)
 
 	setData()
 	card()
@@ -402,7 +471,7 @@ function createRecipe(index) {
 		<div class="flex gap-8 items-center justify-center mt-4">
 			<div
 				class="flex justify-center items-center bg-gray-600 text-xs text-white rounded-sm py-2 px-4 hover:bg-green-700"
-				onclick="addRecipeForm(${index})"
+				onclick="addRecipeForm(${index}); openBirdCards(); closeCreateBird()"
 			>
 				Добавить рецепт
 			</div>
@@ -412,6 +481,12 @@ function createRecipe(index) {
 }
 
 function addRecipeForm(index) {
+	let createRecipeFormEl = document.getElementById("createRecipeForm")
+
+	if (createRecipeFormEl) {
+		createRecipeFormEl.innerHTML = createRecipeForm
+	}
+
 	let recipeName = document.getElementById("recipeName")
 	let recipeText = document.getElementById("recipeText")
 	let f = file1.files[0]
