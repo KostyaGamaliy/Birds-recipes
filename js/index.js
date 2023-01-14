@@ -1,75 +1,41 @@
-/*var recipeForm = `
-	<div class="w-full">
-		<div
-			class="w-full p-6 bg-white border border-gray-200 rounded-lg shadow-md bg-gray-100 my-3"
-		>
-			<label
-				class="text-gray-800 py-2 bg-gray-400 font-medium flex items-center justify-center border-2 border-dotted rounded-md cursor-pointer"
-			>
-				Прикрепить изображение:
-				<input type="file" class="hidden" />
-			</label>
-
-			<div
-				class="flex object-cover py-2 flex items-center justify-center"
-			>
-				IMAGE
-			</div>
-
-			<lable class="text-xl text-black opacity-70">
-				Название рецепта:
-				<input
-					type="text"
-					placeholder="Заголовок"
-					class="mt-1 mx-0 text-black w-full rounded-lg bg-gray-400 border py-1 px-2 text-sm outline-none placeholder: text-gray-700"
-				/>
-			</lable>
-
-			<lable class="text-xl text-black opacity-70">
-				Описание:
-				<textarea
-					placeholder="Опис..."
-					class="mt-1 mx-0 text-black w-full rounded-lg bg-gray-400 border py-1 px-2 text-sm outline-none resize-none h-40 placeholder: text-gray-700"
-				></textarea>
-			</lable>
-		</div>
-	</div>` */
-
 let header = `
 	<div class="flex justify-start lg:w-0 lg:flex-1">
-						<img
-							class="h-8 w-auto sm:h-10"
-							src="https://img.icons8.com/ios-filled/512/salt-bae.png"
-							alt=""
-						/>
-					</div>
+		<img
+			class="h-8 w-auto sm:h-10"
+			src="https://img.icons8.com/ios-filled/512/salt-bae.png"
+			alt=""
+		/>
+	</div>
 
-					<div class="flex items-center justify-center">
-						<button
-							id="allBirdsBtn"
-							class="inline-flex items-center justify-center whitespace-nowrap rounded-md border border-transparent bg-green-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-green-700 cursor-pointer"
-							onclick="card(); closeCreateBird(); openBirdCards()"
-						>
-							Список птиц
-						</button>
-					</div>
+	<div class="flex items-center justify-center">
+		<button
+			id="allBirdsBtn"
+			class="inline-flex items-center justify-center whitespace-nowrap rounded-md border border-transparent bg-green-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-green-700 cursor-pointer"
+			onclick="card(); closeCreateBird(); openBirdCards()"
+		>
+			Список птиц
+		</button>
+	</div>
 
-					<div class="items-center justify-end flex md:flex-1 lg:w-0">
-						<button
-							id="createBirdBtn"
-							class="inline-flex items-center justify-center whitespace-nowrap rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-indigo-700 cursor-pointer"
-							onclick="openCreateBird(); closeBirdCards()"
-							>Создать птицу</button
-						>
-					</div>`
+	<div class="items-center justify-end flex md:flex-1 lg:w-0">
+		<button
+			id="createBirdBtn"
+			class="inline-flex items-center justify-center whitespace-nowrap rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-indigo-700 cursor-pointer"
+			onclick="openCreateBird(); closeBirdCards()"
+			>Создать птицу</button
+		>
+	</div>`
 
 let createBirdForm = `
-	<label
-		class="text-gray-800 py-2 bg-gray-400 font-medium flex items-center justify-center border-2 border-dotted rounded-md cursor-pointer"
-	>
-		Прикрепить изображение:
-		<input type="file" id="file1" class="hidden" onchange="addImage()"/>
-	</label>
+	<lable class="text-xl text-black opacity-70">
+		Сслка на картинку:
+		<input
+			type="text"
+			placeholder="Заголовок"
+			class="mt-1 mx-0 text-black w-full rounded-lg bg-gray-400 border py-1 px-2 text-sm outline-none placeholder: text-gray-700"
+			id="file1"
+		/>
+	</lable>
 
 	<div class="flex object-cover py-2 flex items-center justify-center w-full" id="imgSaveField">
 		<img id="prevImg" class="w-full" />
@@ -80,7 +46,7 @@ let createBirdForm = `
 		<input
 			type="text"
 			placeholder="Заголовок"
-			class="mt-1 mx-0 text-black w-full rounded-lg bg-gray-400 border py-1 px-2 text-sm outline-none placeholder: text-gray-700"
+			class="mt-1 mb-3 mx-0 text-black w-full rounded-lg bg-gray-400 border py-1 px-2 text-sm outline-none placeholder: text-gray-700"
 			id="birdName"
 		/>
 	</lable>
@@ -140,7 +106,7 @@ function card() {
 					alt=""
 				/>
 				<h5
-					class="mb-2 text-2xl font-bold tracking-tight text-slate-700 hover:text-slate-900 text-ellipsis overflow-hidden"
+					class="my-2 text-2xl font-bold tracking-tight text-slate-700 hover:text-slate-900 text-ellipsis overflow-hidden"
 				>
 					${details[i].name}
 				</h5>
@@ -208,11 +174,11 @@ function recipeCard(index) {
 			<div class="max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow-md bg-gray-100 my-3">
 				<img
 					class="rounded-t-lg h-[223px] w-[335px]"
-					src="${object[i].imageUrl}"
+					src="${object[i].recipeImageUrl}"
 					alt=""
 				/>
 				<h5
-					class="mb-2 text-2xl font-bold tracking-tight text-slate-700 hover:text-slate-900 text-ellipsis overflow-hidden"
+					class="my-2 text-2xl font-bold tracking-tight text-slate-700 hover:text-slate-900 text-ellipsis overflow-hidden"
 				>
 					${object[i].recipeName}
 				</h5>
@@ -226,7 +192,7 @@ function recipeCard(index) {
 				<div class="flex flex-row justify-between mt-3">
 					<button
 						class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-green-700 rounded-lg hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-400"
-						onclick="editRecipe(${index},${i}); openCreateBird(); "
+						onclick="editRecipe(${index},${i}); openCreateBird(); closeBirdCards()"
 					>
 						Изменить
 					</button>
@@ -260,31 +226,31 @@ function setData() {
 	localStorage.setItem("details", JSON.stringify(details))
 }
 
-function addImage() {
-	let f = file1.files[0]
-
-	var fileReader = new FileReader()
-	fileReader.onload = function () {
-		prevImg.src = fileReader.result
-	}
-
-	fileReader.readAsDataURL(f)
+function addImage(imageUrl) {
+	let regURL =
+		/^(?:(?:https?|ftp|telnet):\/\/(?:[a-z0-9_-]{1,32}(?::[a-z0-9_-]{1,32})?@)?)?(?:(?:[a-z0-9-]{1,128}\.)+(?:com|net|org|mil|edu|arpa|ru|gov|biz|info|aero|inc|name|[a-z]{2})|(?!0)(?:(?!0[^.]|255)[0-9]{1,3}\.){3}(?!0|255)[0-9]{1,3})(?:\/[a-z0-9.,_@%&?+=\~\/-]*)?(?:#[^ \'\"&<>]*)?$/i
+	return regURL.test(imageUrl)
 }
 
 function save() {
 	let name = document.getElementById("birdName")
 	let desc = document.getElementById("birdDescription")
-	let f = file1.files[0]
+	let imgUrl = document.getElementById("file1")
 
 	if (name.value == 0) {
-		alert("Name is empty")
+		alert("Не оставляйте пустого поля")
+		return
+	}
+
+	if (!addImage(imgUrl.value)) {
+		alert("Не верно указана ссылка на картинку")
 		return
 	}
 
 	let data = {
 		name: name.value,
 		description: desc.value,
-		imageUrl: URL.createObjectURL(f),
+		imageUrl: imgUrl.value,
 		recipeArray: [],
 	}
 
@@ -295,7 +261,7 @@ function save() {
 
 	name.value = ""
 	desc.value = ""
-	prevImg.src = ""
+	imgUrl.value = ""
 }
 
 function deleteData(index) {
@@ -314,15 +280,20 @@ function deleteRecipe(indexObj, indexRecipe) {
 
 function edit(index) {
 	let editForm = `
-		<label
-			class="text-gray-800 py-2 bg-gray-400 font-medium flex items-center justify-center border-2 border-dotted rounded-md cursor-pointer"
-		>
-			Прикрепить изображение:
-			<input type="file" id="file1" class="hidden" />
-		</label>
+	<lable class="text-xl text-black opacity-70">
+		Сслка на картинку:
+		<input
+			type="text"
+			value="${details[index].imageUrl}"
+			placeholder="Заголовок"
+			class="mt-1 mx-0 text-black w-full rounded-lg bg-gray-400 border py-1 px-2 text-sm outline-none placeholder: text-gray-700"
+			id="newImageUrl"
+		/>
+	</lable>
 
-		<div class="flex object-cover py-2 flex items-center justify-center">
-		</div>
+	<div class="flex object-cover py-2 flex items-center justify-center w-full" id="imgSaveField">
+		<img id="prevImg" src="${details[index].imageUrl}" class="w-full" />
+	</div>
 
 		<lable class="text-xl text-black opacity-70">
 			Обновить именование птицы:
@@ -357,15 +328,20 @@ function edit(index) {
 
 function editRecipe(indexObj, indexRecipe) {
 	let editRecipeForm = `
-		<label
-			class="text-gray-800 py-2 bg-gray-400 font-medium flex items-center justify-center border-2 border-dotted rounded-md cursor-pointer"
-		>
-			Прикрепить изображение:
-			<input type="file" id="file1" class="hidden" />
-		</label>
+		<lable class="text-xl text-black opacity-70">
+		Сслка на картинку:
+		<input
+			type="text"
+			value="${details[indexObj].recipeArray[indexRecipe].recipeImageUrl}"
+			placeholder="Заголовок"
+			class="mt-1 mx-0 text-black w-full rounded-lg bg-gray-400 border py-1 px-2 text-sm outline-none placeholder: text-gray-700"
+			id="newRecipeImageUrl"
+		/>
+	</lable>
 
-		<div class="flex object-cover py-2 flex items-center justify-center">
-		</div>
+	<div class="flex object-cover py-2 flex items-center justify-center w-full" id="imgSaveField">
+		<img id="prevImg" src="${details[indexObj].recipeArray[indexRecipe].recipeImageUrl}" class="w-full" />
+	</div>
 
 		<lable class="text-xl text-black opacity-70">
 			Обновить название рецепта:
@@ -401,13 +377,13 @@ function editRecipe(indexObj, indexRecipe) {
 function update(index) {
 	let newBirdName = document.getElementById("newBirdName")
 	let newBirdDescription = document.getElementById("newBirdDescription")
-	let f = file1.files[0]
+	let newImageUrl = document.getElementById("newImageUrl")
 	let getRecipes = details[index].recipeArray
 
 	details[index] = {
 		name: newBirdName.value,
 		description: newBirdDescription.value,
-		imageUrl: URL.createObjectURL(f),
+		imageUrl: newImageUrl.value,
 		recipeArray: getRecipes,
 	}
 
@@ -420,14 +396,14 @@ function update(index) {
 }
 
 function updateRecipe(indexObj, indexRecipe) {
-	let newRecipeName = document.getElementById("newRecipeName").value
-	let newRecipeText = document.getElementById("newRecipeText").value
-	let f = file1.files[0]
+	let newRecipeName = document.getElementById("newRecipeName")
+	let newRecipeText = document.getElementById("newRecipeText")
+	let newRecipeImageUrl = document.getElementById("newRecipeImageUrl")
 
-	details[indexObj].recipeArray[indexRecipe].recipeName = newRecipeName
-	details[indexObj].recipeArray[indexRecipe].recipeText = newRecipeText
+	details[indexObj].recipeArray[indexRecipe].recipeName = newRecipeName.value
+	details[indexObj].recipeArray[indexRecipe].recipeText = newRecipeText.value
 	details[indexObj].recipeArray[indexRecipe].recipeImageUrl =
-		URL.createObjectURL(f)
+		newRecipeImageUrl.value
 
 	setData()
 	card()
@@ -439,12 +415,15 @@ function updateRecipe(indexObj, indexRecipe) {
 
 function createRecipe(index) {
 	let createRecipeForm = `
-		<label
-			class="text-gray-800 py-2 bg-gray-400 font-medium flex items-center justify-center border-2 border-dotted rounded-md cursor-pointer"
-		>
-			Прикрепить изображение:
-			<input type="file" id="file1" class="hidden" onchange="addImage()"/>
-		</label>
+		<lable class="text-xl text-black opacity-70">
+			Сслка на картинку:
+			<input
+				type="text"
+				placeholder="Заголовок"
+				class="mt-1 mx-0 text-black w-full rounded-lg bg-gray-400 border py-1 px-2 text-sm outline-none placeholder: text-gray-700"
+				id="recipeImageUrl"
+			/>
+		</lable>
 
 		<div class="flex object-cover py-2 flex items-center justify-center w-full" id="imgSaveField">
 			<img id="prevImg" class="w-full" />
@@ -489,12 +468,17 @@ function addRecipeForm(index) {
 
 	let recipeName = document.getElementById("recipeName")
 	let recipeText = document.getElementById("recipeText")
-	let f = file1.files[0]
+	let recipeImageUrl = document.getElementById("recipeImageUrl")
+
+	if (!addImage(recipeImageUrl.value)) {
+		alert("Не верно указана ссылка на картинку")
+		return
+	}
 
 	details[index].recipeArray.push({
 		recipeName: recipeName.value,
 		recipeText: recipeText.value,
-		recipeImageUrl: URL.createObjectURL(f),
+		recipeImageUrl: recipeImageUrl.value,
 	})
 
 	setData()
