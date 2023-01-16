@@ -17,6 +17,13 @@ let header = `
 		</button>
 	</div>
 
+	<div class="flex items-center justify-center">
+		<div class="flex items-center">
+			<input id="default-checkbox" type="checkbox" value="" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500" onclick="checkChBox()">
+			<label for="default-checkbox" class="ml-2 text-sm font-medium text-gray-900">Птицы с рецептами</label>
+		</div>
+	</div>
+
 	<div class="items-center justify-end flex md:flex-1 lg:w-0">
 		<button
 			id="createBirdBtn"
@@ -78,6 +85,107 @@ if (createFormEl) {
 	createFormEl.innerHTML = createBirdForm
 }
 
+const options = {
+	method: "GET",
+	url: "https://tasty.p.rapidapi.com/recipes/list",
+	params: { from: "0", size: "20", tags: "under_30_minutes" },
+	headers: {
+		"X-RapidAPI-Key": "d1fbb82f10msh78689a358e02a4cp19499ajsn0da38ecc5ccd",
+		"X-RapidAPI-Host": "tasty.p.rapidapi.com",
+	},
+}
+
+/*axios
+	.request(options)
+	.then(function (response) {
+		console.log(response.data)
+	})
+	.catch(function (error) {
+		console.error(error)
+	})*/
+
+function checkChBox() {
+	let chbox = document.getElementById("default-checkbox")
+	if (chbox.checked) {
+		let birdCardWithRecipesForm = ``
+
+		for (let i = 0; i < details.length; i++) {
+			if (details[i].recipeArray.length != 0) {
+				closeBirdCards()
+				openBirdWithRecipes()
+				birdCardWithRecipesForm += `
+					<div class="max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow-md bg-gray-100 my-3">
+						<img
+							class="rounded-t-lg h-[223px] w-[335px]"
+							src="${details[i].imageUrl}"
+							alt=""
+						/>
+						<h5
+							class="my-2 text-2xl font-bold tracking-tight text-slate-700 hover:text-slate-900 text-ellipsis overflow-hidden"
+						>
+							${details[i].name}
+						</h5>
+
+						<p
+							class="mb-3 font-normal text-gray-700 dark:text-gray-400 overflow-y-auto h-32"
+						>
+							${details[i].description}
+						</p>
+						
+						<a
+							class="inline-flex items-center px-3 py-2 w-full text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 cursor-pointer"
+							onclick="recipeCard(${i})"
+						>
+							Список рецептов
+							<svg
+								aria-hidden="true"
+								class="w-4 h-4 ml-2 -mr-1"
+								fill="currentColor"
+								viewBox="0 0 20 20"
+								xmlns="http://www.w3.org/2000/svg"
+							>
+								<path
+									fill-rule="evenodd"
+									d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
+									clip-rule="evenodd"
+								></path>
+							</svg>
+						</a>
+
+						<div class="flex flex-row justify-between mt-3">
+							<button
+								class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-rose-400"
+								onclick="createRecipe(${i}); openCreateBird(); closeBirdCards()"
+							>
+								Добавить рецепт
+							</button>
+						
+							<button
+								class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-green-700 rounded-lg hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-400"
+								onclick="edit(${i}); openCreateBird(); closeBirdCards()"
+							>
+								Изменить
+							</button>
+
+							<button
+								class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-rose-700 rounded-lg hover:bg-rose-800 focus:ring-4 focus:outline-none focus:ring-rose-400"
+								onclick="deleteData(${i})"
+							>
+								Удалить
+							</button>
+						</div>
+					</div>`
+			}
+			document.getElementById("birdFormWithRecipes").innerHTML =
+				birdCardWithRecipesForm
+		}
+	} else {
+		openBirdCards()
+		closeBirdWithRecipes()
+	}
+}
+
+// Edit Forms
 function openCreateBird() {
 	document.getElementById("createForm").classList.remove("hidden")
 }
@@ -94,6 +202,21 @@ function closeBirdCards() {
 	document.getElementById("birdForm").classList.add("hidden")
 }
 
+function openBirdWithRecipes() {
+	document.getElementById("birdFormWithRecipes").classList.remove("hidden")
+}
+
+function closeBirdWithRecipes() {
+	document.getElementById("birdFormWithRecipes").classList.add("hidden")
+}
+
+function addImage(imageUrl) {
+	let regURL =
+		/^(?:(?:https?|ftp|telnet):\/\/(?:[a-z0-9_-]{1,32}(?::[a-z0-9_-]{1,32})?@)?)?(?:(?:[a-z0-9-]{1,128}\.)+(?:com|net|org|mil|edu|arpa|ru|gov|biz|info|aero|inc|name|[a-z]{2})|(?!0)(?:(?!0[^.]|255)[0-9]{1,3}\.){3}(?!0|255)[0-9]{1,3})(?:\/[a-z0-9.,_@%&?+=\~\/-]*)?(?:#[^ \'\"&<>]*)?$/i
+	return regURL.test(imageUrl)
+}
+
+// Cards
 function card() {
 	let birdCardForm = ``
 
@@ -209,6 +332,7 @@ function recipeCard(index) {
 	document.getElementById("birdForm").innerHTML = recipeCardForm
 }
 
+// Local Storage
 getData()
 card()
 
@@ -226,25 +350,38 @@ function setData() {
 	localStorage.setItem("details", JSON.stringify(details))
 }
 
-function addImage(imageUrl) {
-	let regURL =
-		/^(?:(?:https?|ftp|telnet):\/\/(?:[a-z0-9_-]{1,32}(?::[a-z0-9_-]{1,32})?@)?)?(?:(?:[a-z0-9-]{1,128}\.)+(?:com|net|org|mil|edu|arpa|ru|gov|biz|info|aero|inc|name|[a-z]{2})|(?!0)(?:(?!0[^.]|255)[0-9]{1,3}\.){3}(?!0|255)[0-9]{1,3})(?:\/[a-z0-9.,_@%&?+=\~\/-]*)?(?:#[^ \'\"&<>]*)?$/i
-	return regURL.test(imageUrl)
-}
-
+// Bird functions
 function save() {
 	let name = document.getElementById("birdName")
 	let desc = document.getElementById("birdDescription")
 	let imgUrl = document.getElementById("file1")
 
-	if (name.value == 0) {
-		alert("Не оставляйте пустого поля")
+	if (name.value.length < 3) {
+		alert("Название должно иметь больше 3 букв!")
+		name.value = ""
+		desc.value = ""
+		imgUrl.value = ""
 		return
 	}
 
-	if (!addImage(imgUrl.value)) {
-		alert("Не верно указана ссылка на картинку")
+	if (desc.value.length < 10 || desc.value.length > 100) {
+		alert("Описание птицы не входит в лимит!")
+		name.value = ""
+		desc.value = ""
+		imgUrl.value = ""
 		return
+	}
+
+	if (!addImage(imgUrl.value) && imgUrl.value != "") {
+		alert("Не верно указана ссылка на картинку")
+		name.value = ""
+		desc.value = ""
+		imgUrl.value = ""
+		return
+	}
+
+	if (imgUrl.value == "") {
+		imgUrl.value = "https://img.icons8.com/pixels/512/experimental-bird-pix.png"
 	}
 
 	let data = {
@@ -265,17 +402,12 @@ function save() {
 }
 
 function deleteData(index) {
-	details.splice(index, 1)
+	if (confirm("Вы точно хотите удалить?")) {
+		details.splice(index, 1)
+	}
 
 	setData()
 	card()
-}
-
-function deleteRecipe(indexObj, indexRecipe) {
-	details[indexObj].recipeArray.splice(indexRecipe, 1)
-
-	setData()
-	recipeCard(indexObj)
 }
 
 function edit(index) {
@@ -326,6 +458,58 @@ function edit(index) {
 	document.getElementById("createForm").innerHTML = editForm
 }
 
+function update(index) {
+	let newBirdName = document.getElementById("newBirdName")
+	let newBirdDescription = document.getElementById("newBirdDescription")
+	let newImageUrl = document.getElementById("newImageUrl")
+	let getRecipes = details[index].recipeArray
+
+	if (newBirdName.value.length < 3) {
+		alert("Название должно иметь больше 3 букв!")
+		newBirdName.value = ""
+		newBirdDescription.value = ""
+		newImageUrl.value = ""
+		return
+	}
+
+	if (!addImage(newImageUrl.value) && newImageUrl.value != "") {
+		alert("Не верно указана ссылка на картинку")
+		newBirdName.value = ""
+		newBirdDescription.value = ""
+		newImageUrl.value = ""
+		return
+	}
+
+	if (newImageUrl.value == "") {
+		newImageUrl.value =
+			"https://img.icons8.com/pixels/512/experimental-bird-pix.png"
+	}
+
+	details[index] = {
+		name: newBirdName.value,
+		description: newBirdDescription.value,
+		imageUrl: newImageUrl.value,
+		recipeArray: getRecipes,
+	}
+
+	setData()
+	card()
+
+	if (createFormEl) {
+		createFormEl.innerHTML = createBirdForm
+	}
+}
+
+function deleteRecipe(indexObj, indexRecipe) {
+	if (confirm("Вы точно хотите удалить?")) {
+		details[indexObj].recipeArray.splice(indexRecipe, 1)
+	}
+
+	setData()
+	recipeCard(indexObj)
+}
+
+// Recipe functions
 function editRecipe(indexObj, indexRecipe) {
 	let editRecipeForm = `
 		<lable class="text-xl text-black opacity-70">
@@ -372,27 +556,6 @@ function editRecipe(indexObj, indexRecipe) {
 		</div>`
 
 	document.getElementById("createForm").innerHTML = editRecipeForm
-}
-
-function update(index) {
-	let newBirdName = document.getElementById("newBirdName")
-	let newBirdDescription = document.getElementById("newBirdDescription")
-	let newImageUrl = document.getElementById("newImageUrl")
-	let getRecipes = details[index].recipeArray
-
-	details[index] = {
-		name: newBirdName.value,
-		description: newBirdDescription.value,
-		imageUrl: newImageUrl.value,
-		recipeArray: getRecipes,
-	}
-
-	setData()
-	card()
-
-	if (createFormEl) {
-		createFormEl.innerHTML = createBirdForm
-	}
 }
 
 function updateRecipe(indexObj, indexRecipe) {
@@ -450,7 +613,7 @@ function createRecipe(index) {
 		<div class="flex gap-8 items-center justify-center mt-4">
 			<div
 				class="flex justify-center items-center bg-gray-600 text-xs text-white rounded-sm py-2 px-4 hover:bg-green-700"
-				onclick="addRecipeForm(${index}); openBirdCards(); closeCreateBird()"
+				onclick="addRecipeForm(${index}); openBirdCards(); closeCreateBird();"
 			>
 				Добавить рецепт
 			</div>
@@ -470,9 +633,32 @@ function addRecipeForm(index) {
 	let recipeText = document.getElementById("recipeText")
 	let recipeImageUrl = document.getElementById("recipeImageUrl")
 
-	if (!addImage(recipeImageUrl.value)) {
-		alert("Не верно указана ссылка на картинку")
+	if (recipeName.value.length < 3) {
+		alert("Название должно иметь больше 3 букв!")
+		recipeName.value = ""
+		recipeText.value = ""
+		recipeImageUrl.value = ""
 		return
+	}
+
+	if (recipeText.value.length < 10 || recipeText.value.length > 100) {
+		alert("Описание рецепта не входит в лимит (от 10 до 100 символов)!")
+		recipeName.value = ""
+		recipeText.value = ""
+		recipeImageUrl.value = ""
+		return
+	}
+
+	if (!addImage(recipeImageUrl.value) && recipeImageUrl.value != "") {
+		alert("Не верно указана ссылка на картинку")
+		recipeName.value = ""
+		recipeText.value = ""
+		recipeImageUrl.value = ""
+		return
+	}
+
+	if (recipeImageUrl.value == "") {
+		recipeImageUrl.value = "https://img.icons8.com/dotty/512/meal.png"
 	}
 
 	details[index].recipeArray.push({
