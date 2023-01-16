@@ -18,6 +18,26 @@ let header = `
 	</div>
 
 	<div class="flex items-center justify-center">
+		<button
+			id="allBirdsBtn"
+			class="inline-flex items-center justify-center whitespace-nowrap rounded-md border border-transparent bg-green-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-green-700 cursor-pointer"
+			onclick="sortCardsByStart(); closeCreateBird(); openBirdCards()"
+		>
+			Сортировка за алфавитом А-Я
+		</button>
+	</div>
+
+	<div class="flex items-center justify-center">
+		<button
+			id="allBirdsBtn"
+			class="inline-flex items-center justify-center whitespace-nowrap rounded-md border border-transparent bg-green-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-green-700 cursor-pointer"
+			onclick="sortCardsByEnd(); closeCreateBird(); openBirdCards()"
+		>
+			Сортировка за алфавитом Я-А
+		</button>
+	</div>
+
+	<div class="flex items-center justify-center">
 		<div class="flex items-center">
 			<input id="default-checkbox" type="checkbox" value="" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500" onclick="checkChBox()">
 			<label for="default-checkbox" class="ml-2 text-sm font-medium text-gray-900">Птицы с рецептами</label>
@@ -87,32 +107,31 @@ if (createFormEl) {
 
 const options = {
 	method: "GET",
-	url: "https://tasty.p.rapidapi.com/recipes/list",
-	params: { from: "0", size: "20", tags: "under_30_minutes" },
+	url: "https://tasty.p.rapidapi.com/feeds/list",
+	params: { size: "5", timezone: "+0700", vegetarian: "false", from: "0" },
 	headers: {
 		"X-RapidAPI-Key": "d1fbb82f10msh78689a358e02a4cp19499ajsn0da38ecc5ccd",
 		"X-RapidAPI-Host": "tasty.p.rapidapi.com",
 	},
 }
 
-/*axios
+axios
 	.request(options)
 	.then(function (response) {
 		console.log(response.data)
 	})
 	.catch(function (error) {
 		console.error(error)
-	})*/
+	})
 
 function checkChBox() {
 	let chbox = document.getElementById("default-checkbox")
 	if (chbox.checked) {
 		let birdCardWithRecipesForm = ``
-
+		closeBirdCards()
+		openBirdWithRecipes()
 		for (let i = 0; i < details.length; i++) {
 			if (details[i].recipeArray.length != 0) {
-				closeBirdCards()
-				openBirdWithRecipes()
 				birdCardWithRecipesForm += `
 					<div class="max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow-md bg-gray-100 my-3">
 						<img
@@ -176,6 +195,7 @@ function checkChBox() {
 						</div>
 					</div>`
 			}
+
 			document.getElementById("birdFormWithRecipes").innerHTML =
 				birdCardWithRecipesForm
 		}
@@ -329,6 +349,7 @@ function recipeCard(index) {
 				</div>
 			</div>`
 	}
+
 	document.getElementById("birdForm").innerHTML = recipeCardForm
 }
 
@@ -667,6 +688,35 @@ function addRecipeForm(index) {
 		recipeImageUrl: recipeImageUrl.value,
 	})
 
+	setData()
+	card()
+
+	if (createFormEl) {
+		createFormEl.innerHTML = createBirdForm
+	}
+}
+
+// Sorted
+function byFieldStart(field) {
+	return (a, b) => (a[field] > b[field] ? 1 : -1)
+}
+
+function byFieldEnd(field) {
+	return (a, b) => (a[field] > b[field] ? -1 : 1)
+}
+
+function sortCardsByStart() {
+	details.sort(byFieldStart("name"))
+	setData()
+	card()
+
+	if (createFormEl) {
+		createFormEl.innerHTML = createBirdForm
+	}
+}
+
+function sortCardsByEnd() {
+	details.sort(byFieldEnd("name"))
 	setData()
 	card()
 
