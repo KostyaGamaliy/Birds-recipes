@@ -105,25 +105,6 @@ if (createFormEl) {
 	createFormEl.innerHTML = createBirdForm
 }
 
-const options = {
-	method: "GET",
-	url: "https://tasty.p.rapidapi.com/feeds/list",
-	params: { size: "5", timezone: "+0700", vegetarian: "false", from: "0" },
-	headers: {
-		"X-RapidAPI-Key": "d1fbb82f10msh78689a358e02a4cp19499ajsn0da38ecc5ccd",
-		"X-RapidAPI-Host": "tasty.p.rapidapi.com",
-	},
-}
-
-axios
-	.request(options)
-	.then(function (response) {
-		console.log(response.data)
-	})
-	.catch(function (error) {
-		console.error(error)
-	})
-
 function checkChBox() {
 	let chbox = document.getElementById("default-checkbox")
 	if (chbox.checked) {
@@ -317,20 +298,20 @@ function recipeCard(index) {
 			<div class="max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow-md bg-gray-100 my-3">
 				<img
 					class="rounded-t-lg h-[223px] w-[335px]"
-					src="${object[i].recipeImageUrl}"
+					src="${object[i].image}"
 					alt=""
 				/>
 				<h5
 					class="my-2 text-2xl font-bold tracking-tight text-slate-700 hover:text-slate-900 text-ellipsis overflow-hidden"
 				>
-					${object[i].recipeName}
+					${object[i].title}
 				</h5>
 
-				<p
+				<div
 					class="mb-3 font-normal text-gray-700 dark:text-gray-400 overflow-y-auto h-32"
 				>
-					${object[i].recipeText}
-				</p>
+					${object[i].instructions}
+				</div>
 
 				<div class="flex flex-row justify-between mt-3">
 					<button
@@ -405,21 +386,43 @@ function save() {
 		imgUrl.value = "https://img.icons8.com/pixels/512/experimental-bird-pix.png"
 	}
 
-	let data = {
-		name: name.value,
-		description: desc.value,
-		imageUrl: imgUrl.value,
-		recipeArray: [],
-	}
+	addData(name.value).then(function (response) {
+		let data = {
+			name: name.value,
+			description: desc.value,
+			imageUrl: imgUrl.value,
+			recipeArray: response.recipes,
+		}
 
-	details.push(data)
+		details.push(data)
 
-	setData()
-	card()
+		setData()
+		card()
 
-	name.value = ""
-	desc.value = ""
-	imgUrl.value = ""
+		name.value = ""
+		desc.value = ""
+		imgUrl.value = ""
+	})
+}
+
+function addData(name) {
+	return axios
+		.request({
+			method: "GET",
+			url: "https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/random",
+			params: { number: "5", tags: name.replace(" ", ",").toLowerCase() },
+			headers: {
+				"X-RapidAPI-Key": "d1fbb82f10msh78689a358e02a4cp19499ajsn0da38ecc5ccd",
+				"X-RapidAPI-Host":
+					"spoonacular-recipe-food-nutrition-v1.p.rapidapi.com",
+			},
+		})
+		.then(function (response) {
+			return response.data
+		})
+		.catch(function (error) {
+			console.error(error)
+		})
 }
 
 function deleteData(index) {
@@ -537,7 +540,7 @@ function editRecipe(indexObj, indexRecipe) {
 		Сслка на картинку:
 		<input
 			type="text"
-			value="${details[indexObj].recipeArray[indexRecipe].recipeImageUrl}"
+			value="${details[indexObj].recipeArray[indexRecipe].image}"
 			placeholder="Заголовок"
 			class="mt-1 mx-0 text-black w-full rounded-lg bg-gray-400 border py-1 px-2 text-sm outline-none placeholder: text-gray-700"
 			id="newRecipeImageUrl"
@@ -545,14 +548,14 @@ function editRecipe(indexObj, indexRecipe) {
 	</lable>
 
 	<div class="flex object-cover py-2 flex items-center justify-center w-full" id="imgSaveField">
-		<img id="prevImg" src="${details[indexObj].recipeArray[indexRecipe].recipeImageUrl}" class="w-full" />
+		<img id="prevImg" src="${details[indexObj].recipeArray[indexRecipe].image}" class="w-full" />
 	</div>
 
 		<lable class="text-xl text-black opacity-70">
 			Обновить название рецепта:
 			<input
 				type="text"
-				value="${details[indexObj].recipeArray[indexRecipe].recipeName}"
+				value="${details[indexObj].recipeArray[indexRecipe].title}"
 				placeholder="Заголовок"
 				class="mt-1 mx-0 text-black w-full rounded-lg bg-gray-400 border py-1 px-2 text-sm outline-none placeholder: text-gray-700"
 				id="newRecipeName"
@@ -564,7 +567,7 @@ function editRecipe(indexObj, indexRecipe) {
 			<textarea
 				class="mt-1 mx-0 text-black w-full rounded-lg bg-gray-400 border py-1 px-2 text-sm outline-none resize-none h-40 placeholder: text-gray-700"
 				id="newRecipeText"
-			>${details[indexObj].recipeArray[indexRecipe].recipeText}</textarea>
+			>${details[indexObj].recipeArray[indexRecipe].instructions}</textarea>
 		</lable>
 
 		<div class="flex gap-8 items-center justify-center mt-4">
@@ -584,10 +587,9 @@ function updateRecipe(indexObj, indexRecipe) {
 	let newRecipeText = document.getElementById("newRecipeText")
 	let newRecipeImageUrl = document.getElementById("newRecipeImageUrl")
 
-	details[indexObj].recipeArray[indexRecipe].recipeName = newRecipeName.value
-	details[indexObj].recipeArray[indexRecipe].recipeText = newRecipeText.value
-	details[indexObj].recipeArray[indexRecipe].recipeImageUrl =
-		newRecipeImageUrl.value
+	details[indexObj].recipeArray[indexRecipe].title = newRecipeName.value
+	details[indexObj].recipeArray[indexRecipe].instructions = newRecipeText.value
+	details[indexObj].recipeArray[indexRecipe].image = newRecipeImageUrl.value
 
 	setData()
 	card()
@@ -683,9 +685,9 @@ function addRecipeForm(index) {
 	}
 
 	details[index].recipeArray.push({
-		recipeName: recipeName.value,
-		recipeText: recipeText.value,
-		recipeImageUrl: recipeImageUrl.value,
+		title: recipeName.value,
+		instructions: recipeText.value,
+		image: recipeImageUrl.value,
 	})
 
 	setData()
